@@ -2,3 +2,69 @@
 # primo script che useremmo a lezione
 
 library(raster)
+
+#lezione 10/03/22
+
+install.packages("raster")
+library(raster)
+
+#settaggio cartella di lavoro, con dati raster farlo tutte le volte e ricaricare i dati da 0
+#setwd (set working directory) decido la cartella di lavoro
+#sapere il percorso della cartella
+setwd("c:/lab/")
+
+#carichiamo i dati forniti dal prof
+#importo tabella readtable
+#file raster fatto da tante bande ogniuna con una riflettanza e un sensorino per ogni banda
+#(lunghezza d'onda) ongi senosre regista il paesaggi in un alunghezza d'onda.
+#posso scegliere io qunate bande usare in base a quello che voglio fare
+#blu banda 1
+#verde banda 2
+#rosso banda 3
+#infrarosso banda 4
+#termico banda 6
+#per importare un pacchetto di dati uso la funzione brick
+#cera un oggetto chiamato l2011 con calsse rasterbrick
+
+l2011 <- brick("p224r63_2011.grd") #nella parentesi il nome della mia immagine
+l2011
+
+#classe mi dice il tipo di oggetto che abbiamo: rasterbrick
+#1499 numero di righe 
+#2967 colonne
+#4447533 pixel per ogni banda 
+#7 bande 
+#n righe per il n di colonne mi da il n di pioxel ovvero la risoluzione
+#resolution è la dimensione dei pixel 30x30m
+#source sorgente del dato
+#name sono i nomi delle bande sre (spectral reflectans) vale per tutte le bande tranne per quella del termico
+#valori minimi è sempre 0 (tranne nella banda del termico) e poi valori massimi
+#i valori vanno da 0 a 1: perchè il flusso radinate (quante anergia arriva ) riflettanza divisione tra flusso radibante riflesso e quanto entra
+#se non riflettiamo nulla la riflettanza è uguale a 0
+#se rifletto tutto ho 1
+#quindi valore minimo 0 e valore massimo 1
+#non sempre i valori vanno da 0 a 1(ne parliamo più avanti)
+
+#guardiamo il primo plot della mia immagine
+#plot fa un plot generico x y
+#nel nostro caso x y sono gia nella stessa immahine quindi basta dire il nome della nostra immagine
+
+plot(l2011)
+
+#cambio legenda
+#oggi noi usiamo valori bassi si mettono nero, e valori alti bianchi
+#funzione colorRampPalette decido io i colri e la funzione adatta il colore
+#dell'immagine a i colori che io scelgo
+#la funzione ha due maiuscole, usarle o non funziona
+#prendo i clori dai coliri di r che cerco su internet
+#devo mettere una c davanti perche in r una serie di dati si mette con la c davanti
+#metto il nuemro di passaggi, cioè il numero di colori possibili
+#gli do un nome, creo un oggetto
+
+cl <- colorRampPalette(c("black", "grey", "light gray")) (100)
+
+#rifo il plot usando per ongi banda i nuovi colori
+plot(l2011, col=cl)
+
+#si nota che nella banda 4 c'è una riflettanza sparatissima perche è quella 
+#dell'infrarosso e dove c'è vegetazione questa è alta
