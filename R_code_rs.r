@@ -146,3 +146,68 @@ plot(l2011$B3_sre, col=clred)
 plot(l2011$B4_sre, col=clif)
 dev.off()
 
+#24/03/22
+
+#i plot o li fo come ella lezioe precedente oppure
+#poso scrivere plot(l2011[[4]]) il 4 naturalmente è riferito alla banda 4
+
+#posso usare solo tre bande perche il pc lavora con i colori RGB
+#monto le bande corrispondenti al loro colore dell' RGB
+#lo faccio con il plotRGB
+#stretch fa uno stretch dei valori per fra si che si vedano meglio i contrasti tra i colori
+#può essere lineare "lin" o a istogramma "ist"
+#plotto il layers dell? RGB
+
+plotRGB(l2011, r=3, g=2, b=1, stretch="lin") #l'immagine che restutisce è esattamente come la vedremmo da 200km
+
+#per usare la banda 4 mi slittano tutte
+#la pinata rifette monto nell'infrarosso perche le cellule a palizzata fanno rimbalzare l'infrarosso vicino
+#quindi le pinate riflettono l'infrarosso (anche il verde si riflette, lo vediamo  noi), menttre rosso e blu vengono assorbite
+
+plotRGB(l2011, r=4, g=3, b=2, stretch="lin")
+
+#avendo montato la banda dell'infrarosso sul red tutto quello che è rosso è vegetazione
+
+#spostp l'infrarosso nella componenete green
+
+plotRGB(l2011, r=3, g=4, b=1, stretch="lin")
+
+#così tutto quello che riflette nell'infrarosso vicino diventa verde
+#nell'immagine nella foresta possiamo vedere bene la vegetazione e la sua struttura interna 
+#in violetto abbiamo le zone con suolo nudo, per visualizzare meglio questi terreni passiamo l'infraroso nel blu
+
+plotRGB(l2011, r=3, g=2, b=4, stretch="lin")
+
+#adesso la vegetazione è blu e il giallo è suolo nudo
+#lo stretch, se in una zona non ho tutte le riflettanze (magari ho solo 20 e 25) io posso espandere la scala di valori
+#fino a raggiungere una sorta di nuova banda che varia da 0 a 100.
+#quinid lo stretch lineare amplia i miei valori possibili
+#lo stretch a istogrammi fa la stessa cosa del lineare ma provoca un aumento nella gamma dei colori forte
+
+plotRGB(l2011, r=3, g=4, b=1, stretch="hist")
+
+#così vedo di più la differenza di parti nella foresta, il viola rappresenta il suolo nudo
+
+#per scegliere la composizione delle bande le faccio un pò tutte e poi vedo quale 
+#rappresenta meglio la mia immagine
+
+#es. creare un multiframe (insieme di più immagine) con sopra un immagine con  la visulaizzazione a colori natrurali RGB
+#(stretch lineare) e sotto u immagine a infrarosso (stretch istogrammi)
+
+par(mfrow=c(2,1))
+plotRGB(l2011, r=3, g=2, b=1, stretch="lin")
+plotRGB(l2011, r=3, g=4, b=2, stretch="hist")
+
+#adesso paro un immagine 1988 più vecchia dalla cartella lab
+
+l1988 <- brick("p224r63_1988.grd")
+l1988
+
+#con brick carica le bande tutte insieme della nostra immagine 
+#metto a confronto le due immagini del 1988 e del 2011
+
+par(mfrow=c(2,1))
+plotRGB(l1988, r=4, g=3, b=2, stretch="lin")
+plotRGB(l2011, r=4, g=3, b=2, stretch="lin")
+
+#l'immagine del 1988 vediamo che c'è un accenno di prime strade e campi coltivati
