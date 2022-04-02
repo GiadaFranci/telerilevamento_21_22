@@ -1,0 +1,127 @@
+#01/04/22
+#usiamo la variabile LST (Land Surface Temperature) di copernicus per vedere
+#quanto è cambiata la temperatura in groenlandia in un certo periodo di tempo.
+
+#vado a recuperare i dati dalla cartela greenland
+setwd("c:/lab/greenland")
+
+#funzione brick crea un oggetto Raster Brick, da un immagine satellitare con
+#tante bande tutte insieme le carica tutte su R.
+#noi però adesso nonabbiamo un immagine satellitare già pronta con tutte l bande
+#insieme ma abbiamo 4 dati diversi (lst2000, lst2005, lst2010 e lst2015).
+#per prima cosa li importiamo uno per uno (dopo fa vedere come si iportano tutti insieme)
+#lo facciamo mediante la funzione raster
+
+lst2000 <- raster("lst_2000.tif")
+lst2000 #4428595 pixel, i valori sono da 0 a 65535 è un immagine a 16 bit
+
+#plotto immagine 2000
+
+plot(lst2000) #nelle zone binche centrali abbiamo neve/ghiaccio
+
+#siccome mi da un errore (Error in plot.new() : figure margins too large) provo a fare dev.off
+
+dev.off()
+
+plot(lst2000)
+
+#non ho risolto provo con la funzione par
+
+par(mar = c(1, 1, 1, 1))
+
+#risolto
+#adesso importo tutti gli altri dati uno per uno 
+
+lst2005 <- raster("lst_2005.tif")
+lst2010 <- raster("lst_2010.tif")
+lst2015 <- raster("lst_2015.tif")
+
+#creaimo una color palet
+
+cl <- colorRampPalette(c("blue", "light blue", "pink", "red")) (100)
+
+#creiamo un multiflame of greenland data
+
+par(mfrow=c(2,2))
+plot(lst2000,col=cl)
+plot(lst2005,col=cl)
+plot(lst2010,col=cl)
+plot(lst2015,col=cl)
+
+#vediamo dalle immagini restitutite come all'inizio del 2000 la parte di T° più 
+#fredde è molto più estaesa rispetto agli anni fututi
+
+#adesso vediamo come importare questo set di immagini tutte insieme.
+#usiamo la funzione lapplay che applica una funzione su una lista o un vettore,
+#prende una lista di files e applica a tutti la stessa funzione es. nel nostro
+#caso per importrare usiamo la funzione raster che applichiamo all'intera lista
+#di files.
+
+#1)quinid il primo passaggio è creare la lista di files con la funzione list.files
+#all'interno di questa funzione useremmo l'argomento pattern che serve a spiegare
+#che setrve a spiegare quale è una caratteristica comune di tutti i files che
+#vogliamo importare 
+
+rlist <- list.files(pattern = "lst") #lst sta tra virgolette perche è un pezzo
+#di testo che deve leggere nella cartella
+rlist
+
+#2)applichiamo la funzione raster alla lista di files attraverso la funzione lapplay
+
+import <- lapply(rlist, raster)
+import
+
+#3) adesso potremmo fare lo stack che prende i vari layers e li mette tutti insiem
+#in un singolo file, esattamente come un immagine satellitare.
+
+tgr <- stack(import)
+tgr
+#adesso tgr è un rasterstack stessa cosa del rasterbrick, ma il rasterbrick è
+#quando con la funzione brick importavamo l'intera immagine satellitare, il
+#rasterstack invece lo abbiamo creato noi con la funzione stack.
+
+#a questo punto invece di fare i multiframes (quelli fatti fino ad ora dove
+#ripetevamo la funzione per ogni elemento), io faccio una lista di files, applico
+#funzione lapplay che applica la funzione raster alla lista e poi faccio uno stack.
+#da adesso posso usare tutti gli elementi dello stack con un solo comando es.
+plot(tgr, col=cl)
+#coì ho lo stesso plot di prima ma senza passare dal multiframe
+
+#se adesso voglio plottare solo una banda che si trova all'interno del file che ho unito
+#faccio così:
+plot(tgr[[1]], col=cl) #posso anche scrievre tgr$list_2000
+
+#noi abbiamo fatto, qualche lezione fa, un plottaggio RGB di bande del satellite
+#adesso noi potremmo fare un RGB basandoci sui layers del nostro stack (R=lst2000, 
+#G=lst2005, B=lst2010)
+plotRGB(tgr, r=1, g=2, b=3, stretch="lin")
+
+#pacchetto colorist non lo ha spiegato solo così per farcelo vedere potrebbe essere utile
+
+#secondo esempio di time siries analisis
+#altro set di dati che riguarda un lavoro fatto dall'ESA, con i dati copernicus
+#ma all'interno del prigramma copernicus ci sono anche immagini satellitari ad alta 
+#risuluzione, come sentinel(risoluzuione di 10m e montano vai tipi di sensore,
+#i classici e in più dei sensori specifici per il monitoraggio di alcune sostanze 
+#come gli ossidi di azzoto).
+#il set di dati che ha portato il professore riguarda proprio la variazione degli
+#ossidi di azzoto prima e durante la pandemia.
+
+#vado a recuperare i dati dalla cartela greenland
+setwd("c:/lab/EN")
+
+rlist <- list.files(pattern = "EN")
+rlist
+
+list_rast <- lapply(rlist, raster)
+list_rast
+
+EN_stack <- stack(list_rast)
+EN_stack
+
+cl <- colorRampPalette(c("red", "orange", "yellow")) (100)
+
+plot(EN_stack, col=cl)
+
+#adesso plottare solo la prima immagine dello stack
+plot(EN_stack[[1]], col=cl)
