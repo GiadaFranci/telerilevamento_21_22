@@ -79,3 +79,82 @@ freq(l06c$map)
 #classe 2 178459
 
 #ora creo un dataset con tutte le frequenze e poi fo un plot finale con ggplot2
+
+#28/04/2022
+
+library(raster)
+library(RStoolbox) #contiene funzione per classificazione
+library(ggplot2)
+library(patchwork)
+
+setwd("c:/lab/")
+
+#Continuo le cose della scorsa lezione
+#calcolo proprorzione e percentuale della foresta nel 92 e nel 06
+tot92 <- 341292
+prop_forest_92 <- 307309 / tot92
+percent_forest_92 <- 307309 * 100 / tot92
+#percent 90.042837
+
+tot06 <- 342726
+prop_forest_06 <- 164267 / tot06
+percent_forest_06 <- 164267 * 100 / tot06
+#percent 47.929541
+
+#calcolo proprozione e percentuale dell'agricoltura nel 92 e nel 06
+tot92 <- 341292
+prop_agr_92 <- 33983 / tot92
+percent_agr_92 <- 33983 * 100 / tot92
+#percent 9.957162
+
+tot06 <- 342726
+prop_agr_06 <- 178459 / tot06
+percent_agr_06 <- 178459 * 100/ tot06
+#percent 52.070458
+
+#DATI FINALI
+#92:
+#perce for: 90.042837
+#perce agr: 9.957162
+#06:
+#perce for: 47.929541
+#perce agr: 52.070458
+
+#creiamo un dataframe (tabella) con 3 colonne, la prima è la classe, la seconda 
+#con i valori % del 92 e la terza colonna sono i valori % del 2006
+#nelle righe (classi) abbiamo foresta e agricoltura
+#columns o fields (campi)
+class <- c("Forest", "Agriculture")
+percent_1992 <- c(90.042837, 9.957162)
+percent_2006 <- c(47.929541, 52.070458)
+
+#ora cerao la tabella (dataframe) con una funzione data.frame
+multitemporal <- data.frame(class, percent_1992, percent_2006)
+multitemporal
+#per vederla in formato tabella scrivo View(multitemporal)
+View(multitemporal)
+
+#il pacchetto ggplot2 ha una funzione particolare che è ggplot dove cera un ggplot nuovo dove dico i dati da usare
+#che tipo di colonne uso ecc.. attraverso l'argomento aes (aestetics) in questo caso
+#sono le colonne
+
+#fo un primo plot del 1992
+
+ggplot(multitemporal, aes(x=class, y=percent_1992, color=class)) +#cosi apre un plot vuoto
+geom_bar(stat="identity", fill="white")
+#ora definisco che plot voglio, nel mio caso a barre con la funzione geom_bar dove inserisco la 
+#statistica
+#fo lo stesso con i dati del 2006
+ggplot(multitemporal, aes(x=class, y=percent_2006, color=class)) +#cosi apre un plot vuoto
+  geom_bar(stat="identity", fill="white")
+
+#creo un pdf del 1992 e ddel 2006
+pdf("percentages_1992.pdf")
+ggplot(multitemporal, aes(x=class, y=percent_1992, color=class)) +
+  geom_bar(stat="identity", fill="white")
+dev.off()
+
+pdf("percentages_2006.pdf")
+ggplot(multitemporal, aes(x=class, y=percent_2006, color=class)) +
+  geom_bar(stat="identity", fill="white")
+dev.off()
