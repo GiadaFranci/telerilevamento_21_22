@@ -1,0 +1,114 @@
+
+#19/05/22
+
+library(raster)
+library(RStoolbox) #contiene funzione per classificazione e per analisi multivariata
+library(ggplot2)#per ggplot
+library(patchwork)
+library(viridis)
+
+
+setwd("c:/lab/")
+
+#uniamo analisi mutlivariata insieme ai pattern spaziali
+
+#misurare etrogeneità in un' immagine è utile per valutare la biodiversità in una zona
+#<è eterogeneo il segniale <è la biodiversita
+
+#divido il procedimento in due parti
+
+#1° analisi multivariata
+
+sen <- brick("sentinel_similaun.png") #NIR=1, RED=2, GREEN=3
+sen
+
+ggRGB(sen, 1, 2, 3 )
+
+#guardiamo l'immagine con la vegetazione nel verde
+
+ggRGB(sen, 2, 1, 3)
+
+#adesso voglio passare da tre layer (infrarosso, rosso e verde) in un unico layer
+#uso la funzione rasterPCA prendo le bande le metto in questa nalaisi multivariata 
+#(ne esistono tanyi tipi ma questo è il piu chiaro da capire)
+
+sen_pca <- rasterPCA(sen)
+sen_pca
+#ci sono tanti gruppi: $call è la funzione usta
+# $model indica il modello che andimao ad usare (vediamo le correlazioni tra le bande)
+# $map
+
+#quinid ora faccio per prima un summary per spiegare quanto spiega questa pca del modello
+#cioè la prima componente
+
+summary(sen_pca$model)
+# Importance of components:
+#Proportion of Variance = la prima comp. speiga il 27%, la seconda 32% e la terza 0%
+#Cumulative Proportion = variabilita cumulata tra prima e seconda 99,62%, quinid el sistema originiario a tre bande 
+#quinid per spiegarne due me ne basta una al 99% 
+
+plot(sen_pca$map)
+
+pc1 <- sen_pca$map$PC1
+pc2 <- sen_pca$map$PC2
+pc3 <- sen_pca$map$PC3
+
+g1 <- ggplot() +
+  geom_raster(pc1, mapping=aes(x=x, y=y, fill=PC1)) #ggplot è vuoto perche prima si apre una 
+#finestra vuota e poi si definisce la geometria 
+
+g2 <- ggplot() +
+  geom_raster(pc2, mapping=aes(x=x, y=y, fill=PC2))
+
+g3 <- ggplot() +
+  geom_raster(pc3, mapping=aes(x=x, y=y, fill=PC3))
+
+#con il pacchetto patchwork assoccio il ggplot al nostro oggetto e facciamo le operazioni
+#matematiche e unisco i tre ggplot fatti sopra 
+
+g1+g2+g3
+
+# 2° ora calcolo la variabilita su una delle compnetnti cioè su quella che spiega la maggior
+#parte della variabilita del sistema
+
+#calcolo la variabilità con la funzione focal del PC1
+
+sd3 <- focal(pc1, matrix(1/9, 3, 3), fun=sd)
+sd3
+
+#mappo attraverso il ggplot la deviazione standard della prima componente rpincipale 
+
+ggplot() +
+  geom_raster(sd3, mapping=aes(x=x, y=y, fill=layer))
+
+#vogliamo vedere meglio la diffrenziazione della vegetazione
+
+ggplot() +
+  geom_raster(sd3, mapping=aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis(option = "cividis")
+
+#così individuo tutte le zone a più alta variabilita, eterogeneità e biodiversità
+
+#adesso plotto insieme le varie immagini
+
+im1 <- ggRGB(sen, 2, 1, 3)
+
+g1 <- ggplot() +
+  geom_raster(pc1, mapping=aes(x=x, y=y, fill=PC1))
+
+pm2 <- ggplot() +
+  geom_raster(sd3, mapping=aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis(option = "inferno")
+
+im1+g1+pm2
+
+#cacolo eterogeneità in una finestra 5x5 e non 3x3 come prima
+
+sd5 <- focal(pc1, matrix(1/25, 5, 5), fun=sd)
+
+im4 <- ggplot() +
+  geom_raster(sd5, mapping=aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis(option = "inferno")
+#in questa immagine la variabilità è maggiore perchè abbiamo aumentato la finestra di calcolo
+
+pm2+im4
