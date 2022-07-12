@@ -1,8 +1,8 @@
 # 25/03/22
 
 #calcoliamo spectral vegetation index
-#indice spettrale, noi partiamo con quelli di vegetazione, la pinata quado sta
-#male la pinata cambia colore in molte lunchezze d'onda a nche in quelle che noi non vediamo
+#indice spettrale, noi partiamo con quelli di vegetazione, la pianta quado sta
+#male cambia colore in molte lunchezze d'onda anche in quelle che noi non vediamo
 #questo cambiamento quindi indica uno stres
 #possiamo usare le bande che abbiamo visto fino ada ora per creare questi indici
 
@@ -16,7 +16,7 @@ l1992
 #i valori minimi e massimi ci interessano che vanno da 0 a 255 mentre nelle immagini passate
 #erano da 0 a 1. questo perche ogni pixel è diverso da quelli vicini e ha diverse riflettanze
 #questo vuole dire che in un immagine con tanti pixel questa è molto pesa, per risolvere
-#questa cosa interviene Shannon. Per ridurre la dimensione di un file, parte daun informazione binaria
+#questa cosa interviene Shannon. Per ridurre la dimensione di un file, parte da un informazione binaria
 # 0 o 1, questo concetto si chiama bit. La regola generale è 2^n.
 # noi stiamo usando immagini a 8 bit, cioè 2^8 CON 256 VALORI POSSIBILI nella mappa, questo 
 #se partiamo da 1, come valore minimo, se invece partiamo da 0 avremmo 255.
@@ -47,7 +47,7 @@ plotRGB(l2006, r=2, g=1, b=3, stretch="lin")
 dvi1992 = l1992[[1]] - l1992[[2]]
 dvi1992
 
-#plorriamo questo primo DVI
+#plottiamo questo primo DVI
 
 cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
 plot(dvi1992, col=cl)
@@ -66,7 +66,7 @@ plot(dvi2006, col=cl)
 dvi_diff = dvi1992 - dvi2006
 
 #la warning ci dice che in una piccola parte le immgini non si sovrappongon
-#dovuto al modo in cuolo abbaimo scaricato le immagin ua ppotrebbe avere una riga
+#dovuto al modo in cui abbaimo scaricato le immagini una potrebbe avere una riga
 #di pixel in meno
 
 cld <- colorRampPalette(c('blue','white','red'))(100)
@@ -77,17 +77,17 @@ plot(dvi_diff, col=cld)
 
 #31/03/22
 
-#altro infice simile al DVI chimato NDVI viene standardizzato sulla somma delle due 
+#altro indice simile al DVI chimato NDVI viene standardizzato sulla somma delle due 
 #bande. importante perche se usiamo due immagni con numeri di bit diverse, per
 #standardizzare i due indici  (es.266 e 265) è sufficente standardizzare sui 
 #valori di rifletanza delle due bande tot. serve solo per standardizzare il 
 #nostro indice
 
-#RANGE del DVI se ho un immagine a 8 bit (per ogniuna delle due bande, nero ingrared
+#RANGE del DVI se ho un immagine a 8 bit (per ogniuna delle due bande, nero ingfrared
 # e rosso, usate abbiamo 256 valori possibili) allora un pixel avrà il massimo di nero infrared 
 # 255-0= 255(riflette tutto)e un massimo di rosso(assorbe tutto) 0-255=-255
 #quindi il range del DVI è -255 e 255
-#RANGE NDVI (255-0)/(255+0)=1 questo è massimo, il minimo è (0-255)/(0+255)=1
+#RANGE NDVI (255-0)/(255+0)=1 questo è massimo, il minimo è (0-255)/(0+255)=-1
 #il range del NDVI con immagine a 8 bit è -1 e 1
 
 #l'immagine a 16 bit (per identificare i valori possibili dal n di bitsi fa 16^2)
@@ -137,12 +137,12 @@ par(mfrow=c(2,1))
 plot(ndvi1992, col=cl)
 plot(ndvi2006, col=cl)
 
-#vicino allao 0 è quasi sempre suolo nudo e nella seconda immagni noi abbiamo 
-#valori quasi esclusivamente sullo o soto lo 0
+#vicino allo 0 è quasi sempre suolo nudo e nella seconda immagni noi abbiamo 
+#valori quasi esclusivamente sullo o sotto lo 0
 
 #la libreria (RStoolbox), già caricata, sono strumenti che servono ada analizzare i dati di 
 #telerilevameno.
-#contine anche una funzione chimata spectralIndices, caòcola una serie di indici spettrali
+#contine anche una funzione chimata spectralIndices, calcola una serie di indici spettrali
 #come NDVi. per usarla dobbiamo scrivere le bande coinvolte, noi calcoleremo gli 
 #indici che coinvologono le bande del rosso, infrarosso e verde.
 
@@ -150,7 +150,7 @@ si1992 <- spectralIndices(l1992, green=3, red=2, nir=1)
 
 #visualizziamo quello che abbaimo creato
 
-plot(si1992, col=cl) #così vediamo tutti gli indici che si èpossonocalcolare per
+plot(si1992, col=cl) #così vediamo tutti gli indici che si possono calcolare per
 #un immagine
 
 si2006 <- spectralIndices(l2006, green=3, red=2, nir=1)
@@ -167,5 +167,5 @@ library(rasterdiv)
 #un pacchetto è copNDVI è la media del NDVI dal 1999 al 2017, è l'NDVI di copernicus
 
 plot(copNDVI)
-#le parti verdi della mappa sono quelle con più alta biomassa (equatore e doreste di
+#le parti verdi della mappa sono quelle con più alta biomassa (equatore e foreste di
 #conifere delle altre latitudini). vedo coì a scala globale come varia la biomassa
