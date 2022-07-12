@@ -27,10 +27,10 @@ plotRGB(l06, r=1, g=2, b=3, stretch="lin")
 # install.packages("ggplot2")
 library(ggplot2) #oggi lo usiamo per la prima volta per fare dei grafici statistici 
 #sulle frequenze delle calssi ma lo useremo anche più avanti come restituzione grafica
-#delle immagini da satellitemo drone.
+#delle immagini da satellite o drone.
 #funzione ggRGB è basta su due pacchetti, il ggplot2 e RStoolbox.
 #pacchetto per la visualizzazione dei dati 
-#questo il pacchetto RStoolbox contiene la funzione ggRGB, è un plot RGB ma usa ggplot2
+#il pacchetto RStoolbox contiene la funzione ggRGB, è un plot RGB ma usa ggplot2
 #al livello di codice sostituiamo semplicemente plotRGB con ggRGB
 p1 <- ggRGB(l92, r=1, g=2, b=3, stretch="lin")
 p2 <- ggRGB(l06, r=1, g=2, b=3, stretch="lin")
@@ -61,14 +61,14 @@ plot(l06c$map)
 
 #visualizzare questi dati ci è servito per ottenre delle mappe dove ho dei pixel
 #di foresta e posso cominciare a calcolarmi l'area occupata o la proporzione di pixel 
-#di foresta in un anno rispetto ad un'altro anno. questio conto lo faccio
+#di foresta in un anno rispetto ad un'altro anno. questo conto lo faccio
 #calcolando la frequenza (misura di quante volte avviene un certo evento)
 # es. frequenza dei pixel appartententi alla classe foresta
 
 #per il calcolo delle frequenze uso la funzione freq, funzione di base di R e genera 
 #delle tabelle di frequenza (dice qunti pixel ci sono)
 freq(l92c$map)
-#   value count, i pixel totali nell'aimmagine del 92 sono 341292 e sono suddivisi
+#value count, i pixel totali nell'immagine del 92 sono 341292 e sono suddivisi
 #così:
 #classe 1  33983 pixel
 #classe 2 307309 pixel
@@ -80,16 +80,6 @@ freq(l06c$map)
 
 #ora creo un dataset con tutte le frequenze e poi fo un plot finale con ggplot2
 
-#28/04/2022
-
-library(raster)
-library(RStoolbox) #contiene funzione per classificazione
-library(ggplot2)
-library(patchwork)
-
-setwd("c:/lab/")
-
-#Continuo le cose della scorsa lezione
 #calcolo proprorzione e percentuale della foresta nel 92 e nel 06
 tot92 <- 341292
 prop_forest_92 <- 307309 / tot92
@@ -134,11 +124,11 @@ multitemporal
 #per vederla in formato tabella scrivo View(multitemporal)
 View(multitemporal)
 
-#il pacchetto ggplot2 ha una funzione particolare che è ggplot dove cera un ggplot nuovo dove dico i dati da usare
+#il pacchetto ggplot2 ha una funzione particolare che è ggplot dove crea un ggplot nuovo dove dico i dati da usare
 #che tipo di colonne uso ecc.. attraverso l'argomento aes (aestetics) in questo caso
 #sono le colonne
 
-#fo un primo plot del 1992
+#faccio un primo plot del 1992
 
 ggplot(multitemporal, aes(x=class, y=percent_1992, color=class)) +#cosi apre un plot vuoto
 geom_bar(stat="identity", fill="white")
