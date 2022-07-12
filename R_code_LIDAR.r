@@ -50,8 +50,8 @@ difference <- chm_2013 - chm_2004 #errore peche hanno due risoluzioni diverse le
 #appurata a una meno
 
 chm_2013_r <- resample(chm_2013, chm_2004) #x è quello che vogliamo ricampiponare (2013) e y è la risoluzione a cui trasformarlo
-#conq eusto comando ricampiono un immagine sulla base di un'altra. avevavmo usato un 
-#comando simile che era aggregate pero non fa proprio la stessa cosa, su questo gli dicevamo
+#con qeusto comando ricampiono un immagine sulla base di un'altra.
+#avevavmo usato un comando simile che era aggregate pero non fa proprio la stessa cosa, su questo gli dicevamo
 #noi di quanto trasformare la risoluzione
 
 #ora rifacciamo il confronto
