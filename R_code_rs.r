@@ -1,9 +1,3 @@
-#4.03.22
-# primo script che useremmo a lezione
-
-library(raster)
-
-#lezione 10/03/22
 
 install.packages("raster")
 library(raster)
@@ -16,7 +10,7 @@ setwd("c:/lab/")
 #carichiamo i dati forniti dal prof
 #importo tabella readtable
 #file raster fatto da tante bande ogniuna con una riflettanza e un sensorino per ogni banda
-#(lunghezza d'onda) ongi senosre regista il paesaggi in un alunghezza d'onda.
+#(lunghezza d'onda) ongi senosre regista il paesaggi in una lunghezza d'onda.
 #posso scegliere io qunate bande usare in base a quello che voglio fare
 #blu banda 1
 #verde banda 2
@@ -33,14 +27,13 @@ l2011
 #1499 numero di righe 
 #2967 colonne
 #4447533 pixel per ogni banda 
-
 #7 bande 
 #n righe per il n di colonne mi da il n di pioxel ovvero la risoluzione
 #resolution è la dimensione dei pixel 30x30m
 #source sorgente del dato
 #name sono i nomi delle bande sre (spectral reflectans) vale per tutte le bande tranne per quella del termico
 #valori minimi è sempre 0 (tranne nella banda del termico) e poi valori massimi
-#i valori vanno da 0 a 1: perchè il flusso radinate (quante anergia arriva ) riflettanza divisione tra flusso radibante riflesso e quanto entra
+#i valori vanno da 0 a 1: perchè la riflettanza è la divisione tra flusso radiante riflesso e quanto entra
 #se non riflettiamo nulla la riflettanza è uguale a 0
 #se rifletto tutto ho 1
 #quindi valore minimo 0 e valore massimo 1
@@ -48,7 +41,7 @@ l2011
 
 #guardiamo il primo plot della mia immagine
 #plot fa un plot generico x y
-#nel nostro caso x y sono gia nella stessa immahine quindi basta dire il nome della nostra immagine
+#nel nostro caso x y sono gia nella stessa immagine quindi basta dire il nome della nostra immagine
 
 plot(l2011)
 
@@ -64,12 +57,11 @@ plot(l2011)
 
 cl <- colorRampPalette(c("black", "grey", "light gray")) (100)
 
-#rifo il plot usando per ongi banda i nuovi colori
+#rilancio il plot usando per ongi banda i nuovi colori
 plot(l2011, col=cl)
 
-#si nota che nella banda 4 c'è una riflettanza sparatissima perche è quella 
+#si nota che nella banda 4 c'è una riflettanza altissima perche è quella 
 #dell'infrarosso e dove c'è vegetazione questa è alta
-#lezione 18/03/22
 
 #plottare una singola banda, quella del BLU 
 #prima di tuto devo individuarla B1_sre (banda blu)
@@ -77,7 +69,7 @@ l2011
 plot(l2011$B1_sre)  #vantaggiooso perche capisco cosa sto plottando
 
 #2° metodo
-plot(l2011[[1]]) #seleziono elemento n°1 che è proprio la banda ddel blu
+plot(l2011[[1]]) #seleziono elemento n°1 che è proprio la banda del blu
 
 #camibio la legenda anche a questo grafico
 cl <- colorRampPalette(c("black", "grey", "light grey")) (100)  #100 sono le possibili tonalità tra i tre colori impostati
@@ -146,29 +138,27 @@ plot(l2011$B3_sre, col=clred)
 plot(l2011$B4_sre, col=clif)
 dev.off()
 
-#24/03/22
-
-#i plot o li fo come ella lezioe precedente oppure
+#creo i plot come ella lezioe precedente oppure
 #poso scrivere plot(l2011[[4]]) il 4 naturalmente è riferito alla banda 4
 
 #posso usare solo tre bande perche il pc lavora con i colori RGB
 #monto le bande corrispondenti al loro colore dell' RGB
 #lo faccio con il plotRGB
-#stretch fa uno stretch dei valori per fra si che si vedano meglio i contrasti tra i colori
+#stretch fa uno stretch dei valori per far si che si vedano meglio i contrasti tra i colori
 #può essere lineare "lin" o a istogramma "ist"
-#plotto il layers dell? RGB
+#plotto il layers dell'RGB
 
 plotRGB(l2011, r=3, g=2, b=1, stretch="lin") #l'immagine che restutisce è esattamente come la vedremmo da 200km
 
 #per usare la banda 4 mi slittano tutte
-#la pinata rifette monto nell'infrarosso perche le cellule a palizzata fanno rimbalzare l'infrarosso vicino
-#quindi le pinate riflettono l'infrarosso (anche il verde si riflette, lo vediamo  noi), menttre rosso e blu vengono assorbite
+#la pineta riflette monlto nell'infrarosso perchè le cellule a palizzata fanno rimbalzare l'infrarosso vicino
+#quindi le pinate riflettono l'infrarosso (anche il verde si riflette, lo vediamo  noi), mentre rosso e blu vengono assorbite
 
 plotRGB(l2011, r=4, g=3, b=2, stretch="lin")
 
 #avendo montato la banda dell'infrarosso sul red tutto quello che è rosso è vegetazione
 
-#spostp l'infrarosso nella componenete green
+#sposto l'infrarosso nella componenete green
 
 plotRGB(l2011, r=3, g=4, b=1, stretch="lin")
 
@@ -192,13 +182,13 @@ plotRGB(l2011, r=3, g=4, b=1, stretch="hist")
 #rappresenta meglio la mia immagine
 
 #es. creare un multiframe (insieme di più immagine) con sopra un immagine con  la visulaizzazione a colori natrurali RGB
-#(stretch lineare) e sotto u immagine a infrarosso (stretch istogrammi)
+#(stretch lineare) e sotto un immagine a infrarosso (stretch istogrammi)
 
 par(mfrow=c(2,1))
 plotRGB(l2011, r=3, g=2, b=1, stretch="lin")
 plotRGB(l2011, r=3, g=4, b=2, stretch="hist")
 
-#adesso paro un immagine 1988 più vecchia dalla cartella lab
+#adesso immagine 1988 più vecchia dalla cartella lab
 
 l1988 <- brick("p224r63_1988.grd")
 l1988
