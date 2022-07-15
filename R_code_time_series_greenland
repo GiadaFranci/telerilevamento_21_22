@@ -59,11 +59,9 @@ plot(lst2015,col=cl)
 
 #1)quinid il primo passaggio è creare la lista di files con la funzione list.files
 #all'interno di questa funzione useremmo l'argomento pattern che serve a spiegare
-#che setrve a spiegare quale è una caratteristica comune di tutti i files che
-#vogliamo importare 
+#quale è una caratteristica comune di tutti i files che vogliamo importare 
 
-rlist <- list.files(pattern = "lst") #lst sta tra virgolette perche è un pezzo
-#di testo che deve leggere nella cartella
+rlist <- list.files(pattern = "lst") #lst sta tra virgolette perche è un pezzo di testo che deve leggere nella cartella
 rlist
 
 #2)applichiamo la funzione raster alla lista di files attraverso la funzione lapplay
@@ -71,7 +69,7 @@ rlist
 import <- lapply(rlist, raster)
 import
 
-#3) adesso potremmo fare lo stack che prende i vari layers e li mette tutti insiem
+#3) adesso potremmo fare lo stack che prende i vari layers e li mette tutti insieme
 #in un singolo file, esattamente come un immagine satellitare.
 
 tgr <- stack(import)
