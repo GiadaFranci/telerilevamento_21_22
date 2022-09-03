@@ -1,4 +1,5 @@
 
+
 # AUTHOR: Giada Franci
 
 # This code processes images taken from sentinel_2A and sentinel_3B e 3A of the In.Cal.System (sources of data: EarthExplorer, Copernicus).
@@ -32,6 +33,7 @@ library(viridis)
 library(ggplot2)
 library(RStoolbox)
 library(patchwork)
+library(RColorBrewer)
 
 setwd("D:/fire_data")
 
@@ -168,12 +170,14 @@ View(multitemporal)
 
 # plot of  2019 and 2020
 ggplot(multitemporal, aes(x=class, y=green_perc_19_20, color=class)) +
-  geom_bar(stat="identity", fill="orange")
+  geom_bar(stat="identity", fill=c("red", "green"), width=0.5) +
+  geom_text(aes(label=green_perc_19_20), vjust=-0.3, size=3.5)
 
 
 # plot of 2019 and 2022
 ggplot(multitemporal, aes(x=class, y=green_perc_19_22, color=class)) +
-  geom_bar(stat="identity", fill="green")
+  geom_bar(stat="identity", fill=c("red", "green"), width=0.5) +
+  geom_text(aes(label=green_perc_19_22), vjust=-0.3, size=3.5)
 
 
 ## 2 # LAND SURFACE TEMPERATURE ANALYSIS
@@ -218,5 +222,6 @@ tgr
 # with the function stack.
 
 plot(tgr, col=cl)
+
 
 
