@@ -1,12 +1,24 @@
+
 # AUTHOR: Giada Franci
 
 # This code processes images taken from sentinel_2A and sentinel_3B e 3A of the In.Cal.System (sources of data: EarthExplorer, Copernicus).
 # The images from sentinel 2A include a little aria (1.385.673 ha) in Yarra Ranges National Park while The images from sentinel 3B e 3A include
 # an LST (Land Surface Temperature) variable of a large aria in in South Australia .
-# 
+# In the first part of my project, I calculated the trees that were lost due to the fires that took place in Australia.
+# In the second part of my project I look at the LST, of the various periods, to understand how the disappearance of
+# the trees altered the temperatures in the area douring the current period.
+
 # Data include all the 10 mts resolution bands avaiable: RGB.
 
-# NAMES OF THE USED BANDS
+# NAMES OF THE USED BANDS:
+
+#  T55HEU_20191119T001109_TCI_10m.jp2
+#   T55HEU_20200227T001109_TCI_10m.jp2
+#    T55HEU_20220122T001111_TCI_10m.jp2
+
+#  S3A_SL_2_LST____20190531T233505.SEN3
+#   S3A_SL_2_LST____20200102T233500.SEN3
+#    S3B_SL_2_LST____20220130T231810.SEN3
 
 # SUMMARY
 # 1 # LAND COVER ANALYSIS
@@ -46,45 +58,44 @@ pg19+pg20+pg22
 
 # ## LAND COVER
 
-#classifico le immagini con la funzione unsuperClass
+# I classify images by function unsuperClass
 
 dev.off()
 
 lg2019c <- unsuperClass(lg2019, nClasses=4)
 plot(lg2019c$map)
 lg2019c
-# class 1: terra nuda
-# class 2: bosco
-# class 3: nuvole
-# class 4: aree coltivate
+# class 1: bare ground
+# class 2: woodland
+# class 3: clouds
+# class 4: cultivated land
 
 lg2020c <- unsuperClass(lg2020, nClasses=4)
 plot(lg2020c$map)
 lg2020c
-# class 1: terra nuda
-# class 2: terra coltivata
-# class 3: area bruciata
-# class 4: bosco
+# class 1: bare ground
+# class 2: cultivated land
+# class 3: burned area
+# class 4: woodland
 
 lg2022c <- unsuperClass(lg2022, nClasses=4)
 plot(lg2022c$map)
 lg2022c
-# class 1: terra coltivata + ripresa da incendio
-# class 2: terra nuda
-# class 3: nuvole
-# class 4: bosco
+# class 1: cultivated land + recovery area
+# class 2: bare ground
+# class 3: clouds
+# class 4: woodland
 
-#visualizzare questi dati ci è servito per ottenre delle mappe dove ho dei pixel
-#di aree verdi, così posso cominciare a calcolare l'area occupata e la proporzione di pixel 
-#di aree verdi nell'anno 20019 e rispetto al 2020 e al 2022. Questio conto lo faccio
-#calcolando la frequenza (misura di quante volte avviene un certo evento).
-#Per il calcolo e uso la funzione freq.
+# Visualizing this data has been useful to obtain maps where I have pixels of green areas (woods),
+# so I can begin to calculate the occupied area and the proportion of pixels of green areas in the year 2019
+# and compare it with the years 2020 and 2022.
+# I can see this data from the frequency (measure of how many times a certain event happens).
+
+# for this i use the function freq.
 
 # ### FREQUENCY CALCULATION 
 
-# total pixels 92001420
-
-#suddivisi così:
+# total pixels 92001420 divided like this:
 
 freq(lg2019c$map)
 #value  count:
@@ -107,7 +118,8 @@ freq(lg2022c$map)
 #classe 3   288324 pixel
 #classe 4 67059945 pixel 
 
-#calcolo proprorzione e percentuale del bosco nel 2019, nel 2020 e nel 2022
+# Woods distribution and percentage for years 2019, 2020 and 2022.
+
 tot19 <- 92001420
 prop_green_19 <- 60355174 / tot19
 percent_green_19 <- 60355174 * 100 / tot19
@@ -123,15 +135,15 @@ prop_green_22 <- 67059945 / tot22
 percent_green_22 <- 67059945 * 100 / tot22
 #percent 72,890119
 
-#calcolo area bruciata nel 2020
+# burned area in 2020
 
 tot20 <- 92001420
 prop_fire_20 <- 29784744 / tot20
 percent_fire_20 <- 29784744 * 100 / tot20
 #percent 32,374222
 
-#calcolo totale alberi persi in tutta l'austalia, considerando dati del WWF che riportano circa 
-#19 milioni di ettari impattai dalle fiamme
+# calculation of the total trees, lost throughout the Australia, taking into account
+# the WWF data that report about 19 million hectares of woods impacted by the fire.
 
 green_lost <- 60355174 - 43757344 
 # = 16597830
@@ -145,78 +157,65 @@ class <- c("2019", "2020")
 green_perc_19_20 <- c(65.602437, 47.561596)
 green_perc_19_22 <- c(65.602437, 72.890119)
 
-#ora creiamo la tabella con la funzione data.frame
+# we build the table with the function data.frame
 
 multitemporal <- data.frame(class, green_perc_19_20, green_perc_19_22)
 multitemporal
 
-#per vederla in formato tabella scrivo View(multitemporal)
 View(multitemporal)
 
 # #### PLOT
 
-# plot del  2019 e 2020
+# plot of  2019 and 2020
 ggplot(multitemporal, aes(x=class, y=green_perc_19_20, color=class)) +
   geom_bar(stat="identity", fill="orange")
 
 
-#plot del 2019 e 2022
+# plot of 2019 and 2022
 ggplot(multitemporal, aes(x=class, y=green_perc_19_22, color=class)) +
   geom_bar(stat="identity", fill="green")
 
 
 ## 2 # LAND SURFACE TEMPERATURE ANALYSIS
 
-# usiamo la variabile LST (Land Surface Temperature) di copernicus per vedere
-# quanto è cambiata la temperatura in Australia nella nostra zona di nalisi
-# prima dopo e durante l'incendio.
-
-# funzione brick crea un oggetto Raster Brick, da un immagine satellitare con
-# tante bande tutte insieme.
-# Noi però adesso nonabbiamo un immagine satellitare già pronta con tutte l bande
-# insieme ma abbiamo 4 dati diversi (lst2019, lst2020, lst2022).
-# per prima cosa li importiamo uno per uno (dopo fa vedere come si iportano tutti insieme)
-# lo facciamo mediante la funzione raster
+# we use the variable LST (Land Surface Temperature) of Copernicus
+# to see how much the temperature in Australia has changed
+# before after and during the fire
 
 lst2019 <- raster("lst2019.tif")
 lst2020 <- raster("lst2020.tif")
 lst2022 <- raster("lst2022.tif")
 
-# creaimo una color palet
+# we create a color palet
 
 cl <- colorRampPalette(c("blue", "light blue", "pink", "red")) (100)
 
-# ## importare questo set di immagini tutte insieme.
+# ## I bring the images all together
 
-# usiamo la funzione lapplay che applica una funzione su una lista o un vettore,
-# prende una lista di files e applica a tutti la stessa funzione.
+# I use the function lapply.
+# this function takes a list of files and applies the same command to all the file.
 
-# 1) qcreare la lista di files con la funzione list.files
+# 1) I create the list of files with the function list.files
 
-# all'interno di questa funzione useremmo l'argomento pattern che serve a spiegare
-# quale è una caratteristica comune di tutti i files che vogliamo importare 
+# with the argument pattern we explain the common feature 
+# of the fail that we want to import
 
 rlist <- list.files(pattern = "lst")
 rlist
 
-# 2) applichiamo la funzione raster alla lista di files attraverso la funzione lapplay
+# 2) I apply the raster function using the lapply function
 
 import <- lapply(rlist, raster)
 import
 
-# 3) adesso potremmo fare lo stack che prende i vari layers e li mette tutti insieme
-#    in un singolo file, esattamente come un immagine satellitare.
+# 3) we create the stak that puts together the various layers.
 
 tgr <- stack(import)
 tgr
 
-# tgr è un rasterstack stessa cosa del rasterbrick, ma il rasterbrick è
-# quando con la funzione brick importavamo l'intera immagine satellitare, il
-# rasterstack invece lo abbiamo creato noi con la funzione stack.
-
-#a questo punto invece di fare i multiframes (quelli fatti fino ad ora dove
-#ripetevamo la funzione per ogni elemento), io faccio una lista di files, applico
-#funzione lapplay che applica la funzione raster alla lista e poi faccio uno stack.
+# tgr is a rasterstack it is the same thing of a rasterbrick, but the rasterbrick is
+# the import of a whole satellite image, instead of rasterstack that we have created
+# with the function stack.
 
 plot(tgr, col=cl)
 
