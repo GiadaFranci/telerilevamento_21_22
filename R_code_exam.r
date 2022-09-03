@@ -54,7 +54,7 @@ pg19 <- ggRGB(lg2019, r=1, g=2, b=3, stretch="lin")
 pg20 <- ggRGB(lg2020, r=1, g=2, b=3, stretch="lin")
 pg22 <- ggRGB(lg2022, r=1, g=2, b=3, stretch="lin")
 
-pg19+pg20+pg22
+pg19/pg20/pg22
 
 # ## LAND COVER
 
@@ -65,18 +65,18 @@ dev.off()
 lg2019c <- unsuperClass(lg2019, nClasses=4)
 plot(lg2019c$map)
 lg2019c
-# class 1: bare ground
-# class 2: woodland
-# class 3: clouds
-# class 4: cultivated land
+# class 1: clouds
+# class 2: bare ground
+# class 3: cultivated land
+# class 4: woodland
 
 lg2020c <- unsuperClass(lg2020, nClasses=4)
 plot(lg2020c$map)
 lg2020c
 # class 1: bare ground
-# class 2: cultivated land
-# class 3: burned area
-# class 4: woodland
+# class 2: burned area
+# class 3: woodland
+# class 4: cultivated land
 
 lg2022c <- unsuperClass(lg2022, nClasses=4)
 plot(lg2022c$map)
@@ -99,17 +99,17 @@ lg2022c
 
 freq(lg2019c$map)
 #value  count:
-#classe 1 10563469 pixel
-#classe 2 60355174 pixel
-#classe 3   818023 pixel 
-#classe 4 20264754 pixel 
+#classe 1   818023 pixel
+#classe 2 10563469 pixel
+#classe 3 20264754 pixel 
+#classe 4 60355174 pixel 
 
 freq(lg2020c$map)
 #value  count:
 #classe 1  3397852 pixel
-#classe 2 15061480 pixel
-#classe 3 29784744 pixel
-#classe 4 43757344 pixel 
+#classe 2 29784744 pixel
+#classe 3 43757344 pixel
+#classe 4 15061480 pixel 
 
 freq(lg2022c$map)
 #value  count:
