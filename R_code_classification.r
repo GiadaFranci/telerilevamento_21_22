@@ -1,5 +1,4 @@
 #07/04/22
-#recuperata il 21/04/22
 
 #calssificazione delle immagini con il caso del gran canyon
 
@@ -8,7 +7,7 @@ library(RStoolbox)#libreria per analisi e gestione dati satellitari
 
 setwd("c:/lab/")
 
-#foto fatte dalla space station, non abbiamo immagini satellitari come nelgli
+#foto fatte dalla space station, non abbiamo immagini satellitari come negli
 #esercizzi fatti fino ad ora (imp.non dire mai foto da satellite)
 
 #come passare da dati continui a delle classi es.composizione mineralogica
