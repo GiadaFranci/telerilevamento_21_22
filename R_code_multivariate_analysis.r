@@ -28,7 +28,7 @@ p224r63_2011 <- brick("p224r63_2011_masked.grd")
 plot(p224r63_2011) #sistema a 7 bande l'immagine lendsat
 
 #prima di analisi multivariata facciamo il ricampionamento o resambling
-#diminuisco la risoluzione della mia immaine con la mouving window, aggreggo dei pizel 
+#diminuisco la risoluzione della mia immagine con la mouving window, aggreggo dei pizel 
 # e ne formo con meno dettaglio. la funzione per fare quetso è detta AGGREGATE
 #fa dei summary statistics. fact sta per factor cioè di quanto aggerghiamo i pixel 
 #es. se è 10 compatto 10pixel x 10 pixel
