@@ -29,7 +29,6 @@ g2 <- ggRGB(sen, 2, 1, 3)
 g1+g2
 
 #uso la funzione focal per calcolare la variabilita statistica nelle nostre immagini
-#RIASCOLTARE QUESTO PEZZO
 #facciamo un primo calcolo della variabilita usando l'infrarosso, seleziono prima
 #il primo starto su cui fare il calcolo
 nir <- sen[[1]]
@@ -39,7 +38,6 @@ sd3 <- focal(nir, matrix(1/9, 3, 3), fun=sd) #la matrice è formata da 3x3 pixel
 #adesso faccio un plot con una color palet
 clsd <- colorRampPalette(c("blue","green","pink","magenta","orange","brown","red","yellow"))(100)
 plot(sd3, col=clsd)
-#RIASCOLTARE
 
 #ora plotto con ggplot
 ggplot()+
