@@ -44,7 +44,6 @@
 # # IMPORT AND DATA PREPARATION
 
 library(raster)   
-library(viridis)
 library(ggplot2)
 library(RStoolbox)
 library(patchwork)
